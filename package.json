@@ -4,7 +4,8 @@
   "license": "MIT",
   "main":"./mediafileModule.ts",
   "dependencies": {
-    "graphql-modules": "^2.1.0"
+    "graphql-modules": "^2.1.0",
+    "base-graphql": "workspace:*"
   },
   "publishConfig": {
     "registry": "https://nexus.inuits.io/repository/npm-private"

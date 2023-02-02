@@ -1,5 +1,5 @@
-import { Resolvers } from '../../generated-types/type-defs';
-import { ContextValue } from '../../types';
+import { Resolvers } from "../../generated-types/type-defs";
+import { ContextValue } from "base-graphql";
 
 export const mediafileResolver: Resolvers<ContextValue> = {
   // Upload: GraphQLUpload,
@@ -51,14 +51,14 @@ export const mediafileResolver: Resolvers<ContextValue> = {
         if (
           parent.metadata.filter(
             (metaDataItem: { key: string }) =>
-              metaDataItem.key === 'publication_status'
+              metaDataItem.key === "publication_status"
           )[0]
         ) {
           result =
             parent.metadata.filter(
               (metaDataItem: { key: string }) =>
-                metaDataItem.key === 'publication_status'
-            )[0].value === 'publiek';
+                metaDataItem.key === "publication_status"
+            )[0].value === "publiek";
         } else {
           result = false;
         }
