@@ -2,10 +2,11 @@
   "name": "mediafile-module",
   "version": "0.0.2",
   "license": "MIT",
-  "main":"./mediafileModule.ts",
+  "main": "./mediafileModule.ts",
   "dependencies": {
+    "base-graphql": "^0.0.1",
     "graphql-modules": "^2.1.0",
-    "base-graphql": "^0.0.1"
+    "graphql-upload-ts": "^2.0.5"
   },
   "publishConfig": {
     "registry": "https://nexus.inuits.io/repository/npm-private"
