@@ -5,7 +5,7 @@
   "main":"./mediafileModule.ts",
   "dependencies": {
     "graphql-modules": "^2.1.0",
-    "base-graphql": "workspace:*"
+    "base-graphql": "^0.0.1"
   },
   "publishConfig": {
     "registry": "https://nexus.inuits.io/repository/npm-private"
