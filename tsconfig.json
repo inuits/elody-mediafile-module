@@ -1,6 +1,10 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es6",
+    "noImplicitAny": false,
     "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
