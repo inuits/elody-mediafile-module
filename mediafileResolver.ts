@@ -1,9 +1,7 @@
 import { Resolvers } from "../../generated-types/type-defs";
 import { ContextValue } from "base-graphql";
-import { GraphQLUpload } from 'graphql-upload-ts';
 
 export const mediafileResolver: Resolvers<ContextValue> = {
-  Upload: GraphQLUpload,
   Query: {
     getMediafile: async (_source, { mediafileId }, { dataSources }) => {
       return await dataSources.CollectionAPI.getMediaFile(
