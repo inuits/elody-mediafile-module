@@ -1,13 +1,16 @@
 {
-  "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "esnext", "es2015", "DOM"],
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "target": "es6",
-    "noImplicitAny": false,
     "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
-    "composite": true
-  }
+    "removeComments": true,
+    "rootDir": "../../",
+    "target": "es6"
+  },
+  "include": ["./**/*.ts"],
+  "files": ["../../generated-types/type-defs.ts"]
 }

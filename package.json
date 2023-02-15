@@ -1,13 +1,17 @@
 {
   "name": "mediafile-module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "main": "./mediafileModule.ts",
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "base-graphql": "^0.0.1",
     "graphql-modules": "^2.1.0"
   },
   "publishConfig": {
+    "main": "./dist/modules/mediafileModule/mediafileModule.js",
     "registry": "https://nexus.inuits.io/repository/npm-private"
   }
 }
