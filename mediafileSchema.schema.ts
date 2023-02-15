@@ -1,8 +1,5 @@
-import { gql } from 'graphql-modules';
+import { gql } from "graphql-modules";
 export const mediafileSchema = gql`
-  # Generic
-  scalar Upload
-
   # mediafileTypes
   type MediaFilePostReturn {
     url: String
@@ -51,12 +48,10 @@ export const mediafileSchema = gql`
   }
 
   type Mutation {
-    postMediaFile(mediaFileInput: MediaFileInput!, file: Upload!): MediaFile
     patchMediaFileMetadata(
       MediafileId: String!
       MediaFileMetadata: [MediaFileMetadataInput]!
     ): MediaFile
     getAssetsRelationedWithMediafFile(mediaFileId: String!): [Asset]
-    uploadFile(id: String!, file: Upload!): String
   }
 `;

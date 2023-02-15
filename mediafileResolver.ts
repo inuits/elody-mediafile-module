@@ -10,19 +10,6 @@ export const mediafileResolver: Resolvers<ContextValue> = {
     },
   },
   Mutation: {
-    postMediaFile: async (
-      _source,
-      { mediaFileInput, file },
-      { dataSources }
-    ) => {
-      const mediaFileResult: any =
-        await dataSources.CollectionAPI.postMediaFile(mediaFileInput);
-      await dataSources.StorageAPI.uploadFile(mediaFileResult._key, file);
-      const mediaFileById = await dataSources.CollectionAPI.getMediaFile(
-        mediaFileResult._key
-      );
-      return mediaFileById;
-    },
     patchMediaFileMetadata: async (
       _source,
       { MediafileId, MediaFileMetadata },
