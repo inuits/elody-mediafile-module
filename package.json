@@ -7,7 +7,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "base-graphql": "^0.0.1",
+    "base-graphql": "^0.0.2",
     "graphql-modules": "^2.1.0"
   },
   "publishConfig": {
