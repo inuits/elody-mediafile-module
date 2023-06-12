@@ -1,6 +1,6 @@
 {
   "name": "mediafile-module",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "license": "MIT",
   "main": "./mediafileModule.ts",
   "scripts": {
@@ -8,10 +8,20 @@
   },
   "dependencies": {
     "base-graphql": "*",
+    "@graphql-codegen/add": "^3.2.1",
+    "@graphql-codegen/cli": "^2.16.5",
+    "@graphql-codegen/graphql-modules-preset": "^2.5.12",
+    "@graphql-codegen/typed-document-node": "2.3.13",
+    "@graphql-codegen/typescript": "^2.8.8",
+    "@graphql-codegen/typescript-operations": "^2.5.13",
+    "@graphql-codegen/typescript-resolvers": "^2.7.13",
+    "@types/node": "^18.11.14",
+    "typescript": "^4.3.5",
+    "graphql": "^16.6.0",
     "graphql-modules": "^2.1.0"
   },
   "publishConfig": {
-    "main": "./dist/modules/mediafileModule/mediafileModule.js",
+    "main": "./dist/dams/inuits-dams-mediafile-module/mediafileModule.js",
     "registry": "https://nexus.inuits.io/repository/npm-private"
   }
 }

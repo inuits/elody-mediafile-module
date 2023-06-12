@@ -9,7 +9,12 @@
     "outDir": "./dist",
     "removeComments": true,
     "rootDir": "../../",
-    "target": "es6"
+    "target": "es6",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/*"],
+      "graphql": ["node_modules/graphql"]
+    }
   },
   "include": ["./**/*.ts"],
   "files": ["../../generated-types/type-defs.ts"]
