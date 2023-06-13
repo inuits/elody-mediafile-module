@@ -1,4 +1,4 @@
-image: ${REGISTRY_PROXY}/inuits/dams-graphql:latest
+image: ${REGISTRY_PROXY}/digipolis/dams-graphql:latest
 
 stages:
   - build
