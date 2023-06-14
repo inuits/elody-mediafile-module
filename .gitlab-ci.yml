@@ -1,51 +1,9 @@
-image: ${REGISTRY_PROXY}/digipolis/dams-graphql:latest
+---
+###############################################################################
+# GRAPHQL MODULE PIPELINE
+###############################################################################
 
-stages:
-  - build
-
-build-job:       # build and publish to nexus
-  only: # only build and publish when the package.json changes
-    changes: 
-      - package.json
-  stage: build
-  before_script:
-    - corepack enable
-    - corepack prepare pnpm@7.26.0 --activate
-  script:
-    - echo "Building and publishing the code..."
-    - echo //nexus.inuits.io/repository/:_authToken=${NPM_CONFIG__AUTH_TOKEN} > ~/.npmrc
-    # Alternatively use these 2 lines where `npm config fix` automatically changes (`_authToken=...` to `//nexus.inuits.io/repository/:_authToken=...`) so no hardcoding is needed
-    # - echo _authToken=${NPM_CONFIG__AUTH_TOKEN} >> ~/.npmrc
-    # - npm config fix 
-
-    - NPM_PACKAGE_NAME=$(node -p "require('./package.json').name") # extract the package name from package.json
-    - NPM_PACKAGE_VERSION=$(node -p "require('./package.json').version") # extract the version from package.json
-
-
-    # Check if the current version is not yet present in the published versions => new version to publish
-      # For node:20 base image use the following line instead
-      # if [[ $(npm view "${NPM_PACKAGE_NAME}" versions) != *"${NPM_PACKAGE_VERSION}"* ]]; then
-    - |
-      if ! npm view "$NPM_PACKAGE_NAME" versions | grep -F "$NPM_PACKAGE_VERSION"; then
-        echo "Found unpublished version ${NPM_PACKAGE_VERSION} building and publishing now..."
-        cp ~/codegen.ts ./codegen.ts # copy the codegen from the base image
-        mkdir ./schemas
-        find ~/node_modules/ -type f -name "*.schema.ts" -exec cp -n {} ./schemas \;
-        find ~/node_modules/ -type f -name "*.queries.ts" -exec cp -n {} ./schemas \;
-        pnpm install
-
-        # generate graphql types and move it to the right folder, delete old folder and schemas since they are no longer needed
-        mkdir generated-types
-        rm -rf ../../generated-types
-        mkdir ../../generated-types
-        npx graphql-code-generator --config ./codegen.ts
-        mv -f ./generated-types/type-defs.ts ../../generated-types/type-defs.ts
-        rm -rf ./generated-types
-        rm -rf schemas
-
-        pnpm run build
-        pnpm publish
-        echo "Successfully published version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} to the Nexus NPM registry."
-      else
-        echo "Version ${NPM_PACKAGE_VERSION} of ${NPM_PACKAGE_NAME} has already been published, so no new version has been published."
-      fi
+include:
+  - project: 'inuits/gitlab-ci/pipeline-templates'
+    file: 'graphql-module-pipeline.yml'
+    ref: 'master'
