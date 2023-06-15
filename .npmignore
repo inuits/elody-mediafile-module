@@ -1,3 +1,5 @@
 !/dist
 /tsconfig.json
 *.ts
+!*.schema.ts
+!.queries.ts
