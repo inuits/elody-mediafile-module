@@ -49,7 +49,7 @@ export const mediafileResolver: Resolvers<ContextValue> = {
           result = false;
         }
       } catch (e) {
-        console.log(e);
+        result = false;
       }
       return result;
     },
