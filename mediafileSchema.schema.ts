@@ -1,6 +1,10 @@
 import { gql } from "graphql-modules";
 export const mediafileSchema = gql`
-  # mediafileTypes
+  enum Entitytyping {
+    asset
+    mediafile
+  }
+
   type MediaFilePostReturn {
     url: String
   }
@@ -41,6 +45,22 @@ export const mediafileSchema = gql`
     is_primary: Boolean
     is_primary_thumbnail: Boolean
     user: String
+  }
+
+  type Asset implements Entity {
+    id: String!
+    uuid: String!
+    type: String!
+    teaserMetadata: teaserMetadata
+    permission: [Permission]
+    intialValues: IntialValues!
+    allowedViewModes: AllowedViewModes
+    relationValues: RelationValues
+    entityView: ColumnList!
+    advancedFilters: AdvancedFilters
+    sortOptions: SortOptions
+    createFormFields: FormFields
+    bulkOperationOptions: BulkOperationOptions
   }
 
   type Query {
