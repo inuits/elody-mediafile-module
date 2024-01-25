@@ -5,5 +5,9 @@
 
 include:
   - project: 'inuits/gitlab-ci/pipeline-templates'
-    file: 'graphql-module-pipeline.yml'
-    ref: 'master'
+    file: 'pipelines/applications/graphql-module-pipeline.yml'
+    ref: 'v2.0.0'
+
+variables:
+  GRAPHQL_IMAGE: 'pza/dams-graphql'
+  MOVE_SCHEMA: 'baseSchema.schema.ts'
