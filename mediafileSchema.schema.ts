@@ -32,12 +32,12 @@ export const mediafileSchema = gql`
     user: String
   }
 
-  type MediaFile {
+  type MediaFile { 
     _id: String!
-    original_file_location: String
-    thumbnail_file_location: String
-    transcode_filename: String
-    filename: String
+    original_object_location: String
+    thumbnail_object_location: String
+    transcode_identifier: String
+    identifier: String
     entities: [String]
     metadata: [MediaFileMetadata]
     mimetype: String
