@@ -55,7 +55,7 @@ export const mediafileSchema = gql`
     permission: [Permission]
     intialValues: IntialValues!
     allowedViewModes: AllowedViewModes
-    relationValues: RelationValues
+    relationValues: JSON
     entityView: ColumnList!
     advancedFilters: AdvancedFilters
     sortOptions: SortOptions
