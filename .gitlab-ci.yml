@@ -6,7 +6,7 @@
 include:
   - project: 'inuits/gitlab-ci/pipeline-templates'
     file: 'pipelines/applications/graphql-module-pipeline.yml'
-    ref: 'v2.0.0'
+    ref: 'v3.0.2'
 
 variables:
   GRAPHQL_IMAGE: 'pza/dams-graphql'
