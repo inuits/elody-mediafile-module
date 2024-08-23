@@ -73,5 +73,6 @@ export const mediafileSchema = gql`
       MediaFileMetadata: [MediaFileMetadataInput]!
     ): MediaFile
     getAssetsRelationedWithMediafFile(mediaFileId: String!): [Asset]
+    getMediaRelationedWithMediafFile(mediaFileId: String!): [Media]
   }
 `;
