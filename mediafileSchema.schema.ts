@@ -62,6 +62,22 @@ export const mediafileSchema = gql`
     createFormFields: FormFields
     bulkOperationOptions: BulkOperationOptions
   }
+  
+  type Media implements Entity {
+    id: String!
+    uuid: String!
+    type: String!
+    teaserMetadata: teaserMetadata
+    permission: [Permission]
+    intialValues: IntialValues!
+    allowedViewModes: AllowedViewModes
+    relationValues: JSON
+    entityView: ColumnList!
+    advancedFilters: AdvancedFilters
+    sortOptions: SortOptions
+    createFormFields: FormFields
+    bulkOperationOptions: BulkOperationOptions
+  }
 
   type Query {
     getMediafile(mediafileId: String): MediaFile
