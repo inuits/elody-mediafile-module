@@ -61,6 +61,7 @@ export const mediafileSchema = gql`
     sortOptions: SortOptions
     createFormFields: FormFields
     bulkOperationOptions: BulkOperationOptions
+    previewComponent: PreviewComponent
   }
   
   type Media implements Entity {
