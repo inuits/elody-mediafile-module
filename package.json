@@ -22,6 +22,7 @@
   },
   "publishConfig": {
     "main": "./dist/dams/inuits-dams-mediafile-module/mediafileModule.js",
+    "types": "./types/dams/nuits-dams-mediafile-module/mediafileModule.d.ts",
     "registry": "https://nexus.inuits.io/repository/npm-private"
   }
 }
