@@ -20,4 +20,10 @@ export const mediafileQueries = gql`
             }
         }
     }
+
+    query GetPrimaryMediafileFromEntity($entityId: String!) {
+        GetPrimaryMediafileFromEntity(entityId: $entityId) {
+            ...mediafileInEntity
+        }
+    }
 `;

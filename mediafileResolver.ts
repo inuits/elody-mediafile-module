@@ -1,6 +1,6 @@
-import {MediaFile, Resolvers} from "../../generated-types/type-defs";
+import {Entitytyping, MediaFile, Resolvers} from "../../generated-types/type-defs";
 import { GraphQLError } from "graphql";
-import { ContextValue } from "base-graphql";
+import { ContextValue, type CollectionAPIEntity } from "base-graphql";
 
 export const mediafileResolver: Resolvers<ContextValue> = {
   Query: {
@@ -9,6 +9,12 @@ export const mediafileResolver: Resolvers<ContextValue> = {
         mediafileId as string
       );
     },
+    GetPrimaryMediafileFromEntity: async (_source, {entityId}, {dataSources}) => {
+      const entity: CollectionAPIEntity = await dataSources.CollectionAPI.getEntity(entityId, Entitytyping.BaseEntity)  // Todo: Have a look if we can remove the type parameter from the getEntity function
+      const primaryMediafileId = entity.primary_mediafile_id
+      if (!primaryMediafileId) throw new GraphQLError("Entity does not have a primary mediafile or access has been restricted")
+      return await dataSources.CollectionAPI.getEntity(primaryMediafileId, Entitytyping.Mediafile)
+    }
   },
   Mutation: {
     patchMediaFileMetadata: async (
