@@ -1,6 +1,7 @@
 import { createModule } from 'graphql-modules';
 import { mediafileSchema } from './mediafileSchema.schema';
 import { mediafileResolver } from './mediafileResolver';
+import {MediafileAPI} from "./sources/collection";
 
 const mediafileModule = createModule({
   id: 'mediafileModule',
@@ -9,4 +10,4 @@ const mediafileModule = createModule({
   resolvers: [mediafileResolver],
 });
 
-export { mediafileModule, mediafileResolver, mediafileSchema };
+export { mediafileModule, mediafileResolver, mediafileSchema, MediafileAPI };

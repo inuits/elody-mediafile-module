@@ -5,6 +5,10 @@ export const mediafileSchema = gql`
     mediafile
   }
 
+  enum Collection {
+      mediafiles
+  }
+
   type MediaFilePostReturn {
     url: String
   }
