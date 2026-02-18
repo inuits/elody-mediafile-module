@@ -9,11 +9,9 @@ const config: CodegenConfig = {
     },
   },
   config: {
+    onlyEnums: true,
     enumsAsTypes: false,
-    preResolveTypes: true,
     scalars: { Void: 'void' },
-    useTypeImports: false,
-    dedupeFragments: true,
   },
 };
 
