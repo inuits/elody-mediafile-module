@@ -5,7 +5,12 @@ const config: CodegenConfig = {
   schema: './*.schema.ts',
   generates: {
     '../../generated-types/type-defs.ts': {
-      plugins: [{ typescript: { onlyEnums: true, enumsAsTypes: false, skipTypename: true} }],
+      plugins: ['typescript' ],
+      config: {
+        onlyEnums: true,
+        enumsAsTypes: false,
+        skipTypename: true
+      }
     },
   },
 };
