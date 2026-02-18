@@ -9,13 +9,13 @@
   "dependencies": {
     "base-graphql": "*",
     "@types/node": "^18.11.14",
-    "typescript": "^4.3.5",
-    "graphql": "^16.6.0",
+    "typescript": "^5.0.0",
+    "graphql": "^16.9.0",
     "graphql-modules": "^2.1.0"
   },
   "publishConfig": {
     "main": "./dist/dams/inuits-dams-mediafile-module/mediafileModule.js",
-    "types": "./types/dams/nuits-dams-mediafile-module/mediafileModule.d.ts",
+    "types": "./types/dams/inuits-dams-mediafile-module/mediafileModule.d.ts",
     "registry": "https://nexus.inuits.io/repository/npm-private"
   }
 }
