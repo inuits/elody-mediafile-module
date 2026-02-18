@@ -1,6 +1,18 @@
 import { gql } from "graphql-modules";
 
 export const mediafileQueries = gql`
+    mutation GenerateTranscode(
+        $mediafileIds: [String!]!
+        $transcodeType: TranscodeType!
+        $masterEntityId: String
+    ) {
+        generateTranscode(
+            mediafileIds: $mediafileIds
+            transcodeType: $transcodeType
+            masterEntityId: $masterEntityId
+        )
+    }
+    
     mutation linkMediafileToEntity(
         $entityId: String!
         $mediaFileInput: MediaFileInput!
