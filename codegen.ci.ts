@@ -11,7 +11,11 @@ const config: CodegenConfig = {
   config: {
     onlyEnums: true,
     enumsAsTypes: false,
-    scalars: { Void: 'void' },
+    skipTypename: true,
+    noExport: false,
+    scalars: {
+      Void: 'void',
+    },
   },
 };
 
