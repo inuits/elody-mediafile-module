@@ -83,6 +83,7 @@ export const mediafileSchema = gql`
 
   type Query {
     getMediafile(mediafileId: String): MediaFile
+    GetPrimaryMediafileFromEntity(entityId: String!): Entity
   }
 
   type Mutation {

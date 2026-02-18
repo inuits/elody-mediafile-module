@@ -5,7 +5,7 @@ import { ContextValue, type CollectionAPIEntity } from "base-graphql";
 export const mediafileResolver: Resolvers<ContextValue> = {
   Query: {
     getMediafile: async (_source, { mediafileId }, { dataSources }) => {
-      return await dataSources.CollectionAPI.getMediaFile(
+      return await dataSources.MediafileAPI.getMediaFile(
         mediafileId as string
       );
     },
@@ -22,7 +22,7 @@ export const mediafileResolver: Resolvers<ContextValue> = {
       { MediafileId, MediaFileMetadata },
       { dataSources }
     ) => {
-      return dataSources.CollectionAPI.patchMetaDataMediaFile(
+      return dataSources.MediafileAPI.patchMetaDataMediaFile(
         MediafileId,
         MediaFileMetadata
       );
@@ -32,7 +32,7 @@ export const mediafileResolver: Resolvers<ContextValue> = {
       { mediaFileId },
       { dataSources }
     ) => {
-      return dataSources.CollectionAPI.getAssetsRelationedWithMediafFile(
+      return dataSources.MediafileAPI.getAssetsRelationedWithMediafFile(
         mediaFileId
       );
     },
@@ -46,7 +46,7 @@ export const mediafileResolver: Resolvers<ContextValue> = {
 
       try {
         mediafileIds.forEach((mediafileId: string) => {
-          mediafiles.push(dataSources.CollectionAPI.getMediaFile(mediafileId));
+          mediafiles.push(dataSources.MediafileAPI.getMediaFile(mediafileId));
         });
 
         Promise.all(mediafiles).then(
@@ -76,7 +76,7 @@ export const mediafileResolver: Resolvers<ContextValue> = {
         { dataSources }
     ) => {
       const linkedResult: any =
-          await dataSources.CollectionAPI.linkMediafileToEntity(
+          await dataSources.MediafileAPI.linkMediafileToEntity(
               entityId,
               mediaFileInput
           );
