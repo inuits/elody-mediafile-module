@@ -51,6 +51,22 @@ export const mediafileSchema = gql`
     user: String
   }
 
+  interface Entity {
+      id: String!
+      uuid: String!
+      type: String!
+      teaserMetadata: teaserMetadata
+      intialValues: IntialValues!
+      allowedViewModes: AllowedViewModes
+      relationValues: JSON
+      entityView: ColumnList!
+      advancedFilters: AdvancedFilters
+      sortOptions: SortOptions
+      bulkOperationOptions: BulkOperationOptions
+      previewComponent: PreviewComponent
+  }
+
+
   type Asset implements Entity {
     id: String!
     uuid: String!
