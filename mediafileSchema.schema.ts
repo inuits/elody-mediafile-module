@@ -1,7 +1,6 @@
 import { gql } from "graphql-modules";
 export const mediafileSchema = gql`
   enum Entitytyping {
-    asset
     mediafile
   }
 
@@ -66,22 +65,6 @@ export const mediafileSchema = gql`
       previewComponent: PreviewComponent
   }
 
-
-  type Asset implements Entity {
-    id: String!
-    uuid: String!
-    type: String!
-    teaserMetadata: teaserMetadata
-    intialValues: IntialValues!
-    allowedViewModes: AllowedViewModes
-    relationValues: JSON
-    entityView: ColumnList!
-    advancedFilters: AdvancedFilters
-    sortOptions: SortOptions
-    bulkOperationOptions: BulkOperationOptions
-    previewComponent: PreviewComponent
-  }
-
   type Media implements Entity {
     id: String!
     uuid: String!
@@ -107,7 +90,7 @@ export const mediafileSchema = gql`
       MediafileId: String!
       MediaFileMetadata: [MediaFileMetadataInput]!
     ): MediaFile
-    getAssetsRelationedWithMediafFile(mediaFileId: String!): [Asset]
+    getAssetsRelationedWithMediafFile(mediaFileId: String!): [Entity]
     getMediaRelationedWithMediafFile(mediaFileId: String!): [Media]
     generateTranscode(
     mediafileIds: [String!]!
