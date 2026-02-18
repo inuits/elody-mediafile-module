@@ -5,7 +5,7 @@ const config: CodegenConfig = {
   schema: './*.schema.ts',
   generates: {
     '../../generated-types/type-defs.ts': {
-      plugins: [{ typescript: {} }, { 'typescript-resolvers': {} }],
+      plugins: [{ typescript: {} }],
     },
   },
   config: {
