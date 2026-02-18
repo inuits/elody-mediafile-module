@@ -2,10 +2,12 @@ import { createModule } from 'graphql-modules';
 import { mediafileSchema } from './mediafileSchema.schema';
 import { mediafileResolver } from './mediafileResolver';
 import {MediafileAPI} from "./sources/mediafile";
+import {MediafileTranscodeService} from "./sources/mediafileTranscode"
 
-declare module "base-graphql" { // Use the actual package name here
+declare module "base-graphql" {
   interface DataSources {
     MediafileAPI: MediafileAPI;
+    TranscodeService: MediafileTranscodeService;
   }
 }
 
@@ -16,4 +18,4 @@ const mediafileModule = createModule({
   resolvers: [mediafileResolver],
 });
 
-export { mediafileModule, mediafileResolver, mediafileSchema, MediafileAPI };
+export { mediafileModule, mediafileResolver, mediafileSchema, MediafileAPI, MediafileTranscodeService };
