@@ -3,7 +3,7 @@ import {
     Collection,
     Entitytyping, Maybe,
     MediaFileInput, MediaFileMetadataInput,
-} from "../../../generated-types/type-defs";
+} from "@/types";
 
 export class MediafileAPI extends AuthRESTDataSource {
     public baseURL = `${this.environment.api.collectionApiUrl}/`;

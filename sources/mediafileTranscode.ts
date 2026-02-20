@@ -1,5 +1,5 @@
 import { TranscodeService } from 'base-graphql';
-import {MediaFile, TranscodeType} from "../../../generated-types/type-defs";
+import {MediaFile, TranscodeType} from "@/types";
 
 export class MediafileTranscodeService extends TranscodeService {
     async generateTranscode(
