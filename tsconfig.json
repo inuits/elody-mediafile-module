@@ -16,7 +16,6 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "graphql": ["node_modules/graphql"],
       "@/types": ["./generated-types/type-defs.ts"],
     },
   },
