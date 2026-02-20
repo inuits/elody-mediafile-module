@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "resolveJsonModule": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -9,15 +10,21 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "removeComments": true,
-    "rootDir": "../../",
+    "rootDir": "./",
+    "declarationDir": "./types",
     "target": "es6",
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*"],
-      "graphql": ["node_modules/graphql"]
-    }
+      "graphql": ["node_modules/graphql"],
+      "@/types": ["./generated-types/type-defs.ts"],
+    },
   },
-  "include": ["./**/*.ts", "../../generated-types/type-defs.ts"],
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules",
+    "./test/**/*.test.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+  ],
+  "include": ["./**/*.ts", "./**/*.json"],
 }

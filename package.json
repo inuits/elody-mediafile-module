@@ -14,8 +14,8 @@
     "graphql-modules": "^2.1.0"
   },
   "publishConfig": {
-    "main": "./dist/dams/inuits-dams-mediafile-module/mediafileModule.js",
-    "types": "./types/dams/inuits-dams-mediafile-module/mediafileModule.d.ts",
+    "main": "./dist/main.js",
+    "types": "./types/main.d.ts",
     "registry": "https://nexus.inuits.io/repository/npm-private"
   }
 }
