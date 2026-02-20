@@ -1,4 +1,4 @@
-import {Entitytyping, MediaFile, Resolvers} from "@/types";
+import {Entitytyping, MediaFile, Resolvers} from "./generated-types/type-defs";
 import { GraphQLError } from "graphql";
 import { ContextValue, type CollectionAPIEntity } from "base-graphql";
 

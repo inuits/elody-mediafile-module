@@ -15,9 +15,6 @@
     "target": "es6",
     "skipLibCheck": true,
     "baseUrl": "./",
-    "paths": {
-      "@/types": ["./generated-types/type-defs.ts"],
-    },
   },
   "exclude": [
     "node_modules",
