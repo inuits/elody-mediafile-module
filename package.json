@@ -1,6 +1,6 @@
 {
   "name": "mediafile-module",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "license": "MIT",
   "main": "./mediafileModule.ts",
   "scripts": {
