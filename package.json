@@ -1,20 +1,23 @@
 {
   "name": "mediafile-module",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "license": "MIT",
   "main": "./mediafileModule.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "dependencies": {
-    "base-graphql": "*",
-    "@types/node": "^18.11.14",
-    "typescript": "^5.0.0",
-    "graphql": "^16.9.0",
-    "graphql-modules": "^2.1.0",
     "@graphql-codegen/add": "^4.0.1",
     "@graphql-codegen/cli": "^4.0.1",
-    "@graphql-codegen/graphql-modules-preset": "^4.0.11"
+    "@graphql-codegen/graphql-modules-preset": "^4.0.11",
+    "@types/node": "^18.11.14",
+    "base-graphql": "*",
+    "graphql": "^16.9.0",
+    "graphql-modules": "^2.1.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "tsc-alias": "^1.8.16"
   },
   "publishConfig": {
     "main": "./dist/main.js",
