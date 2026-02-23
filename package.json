@@ -10,6 +10,7 @@
     "@graphql-codegen/add": "^4.0.1",
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/graphql-modules-preset": "^4.0.11",
+    "@graphql-codegen/typescript-resolvers": "^2.7.13",
     "@types/node": "^18.11.14",
     "base-graphql": "*",
     "graphql": "^16.9.0",
