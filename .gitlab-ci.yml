@@ -1,79 +1,9 @@
 ---
 ###############################################################################
-# GRAPHQL MODULE
+# GRAPHQL MODULE PIPELINE
 ###############################################################################
 
-# Turn of deploy on braches other than master/main.
-workflow:
-  rules:
-    - if: "$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH"
-      when: never
-    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-      when: always
-
-stages:
-  - test
-  - build
-
-test-job:
-  stage: test
-  image: node:18-alpine
-  tags:
-    - prod
-  variables:
-    NODE_ENV: "testing"
-  script: |
-    echo //nexus.inuits.io/repository/:_authToken=${NPM_CONFIG__AUTH_TOKEN} > ~/.npmrc
-    npm install -g pnpm
-    pnpm install --include=dev
-
-    if [ -f "./__mock__/types.ts" ]; then
-      mkdir -p ./generated-types
-      cp ./__mock__/types.ts ./generated-types/type-defs.ts
-      echo "Mock types copied successfully"
-    else
-      echo "Mock types file not found, skipping tests."
-      exit 0
-    fi
-
-    TEST_FILES=$(find . -path ./node_modules -prune -o -path ./.git -prune -o -type f \( -name "*.test.ts" -o -name "*.spec.ts" \) -print)
-
-    if [ -n "$TEST_FILES" ]; then
-      echo "Found test files:"
-      echo "$TEST_FILES"
-      echo "Running vitest..."
-      pnpm exec vitest --run
-    else
-      echo "No test files found, skipping tests."
-      exit 0
-    fi
-  artifacts:
-    paths:
-      - node_modules/
-      - ./generated-types/
-    expire_in: 1 hour
-
-build-job:
-  tags:
-    - prod
-  stage: build
-  image: node:18-alpine
-  needs: ["test-job"]
-  before_script:
-    - corepack enable
-  script:
-    - echo //nexus.inuits.io/repository/:_authToken=${NPM_CONFIG__AUTH_TOKEN} > ~/.npmrc
-    - NPM_PACKAGE_NAME=$(node -p "require('./package.json').name")
-    - NPM_PACKAGE_VERSION=$(node -p "require('./package.json').version")
-
-    - |
-      if ! npm view "$NPM_PACKAGE_NAME" versions | grep -F "$NPM_PACKAGE_VERSION"; then
-        mkdir -p ./generated-types
-
-        pnpm exec graphql-codegen --config codegen.ci.ts
-
-        pnpm build
-        pnpm publish
-      else
-          echo "Version exists, skipping."
-      fi
+include:
+  - project: 'inuits/gitlab-ci/pipeline-templates'
+    file: 'pipelines/applications/graphql-module-pipeline.yml'
+    ref: 'v4.15.0'
