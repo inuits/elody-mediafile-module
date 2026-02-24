@@ -65,6 +65,22 @@ export const mediafileSchema = gql`
       previewComponent: PreviewComponent
   }
 
+  type MediaFileEntity implements Entity {
+      id: String!
+      uuid: String!
+      type: String!
+      teaserMetadata: teaserMetadata
+      intialValues: IntialValues!
+      allowedViewModes: AllowedViewModes
+      relationValues: JSON
+      entityView: ColumnList!
+      advancedFilters: AdvancedFilters
+      sortOptions: SortOptions
+      bulkOperationOptions: BulkOperationOptions
+      previewComponent: PreviewComponent
+      deleteQueryOptions: DeleteQueryOptions
+  }
+
   type Media implements Entity {
     id: String!
     uuid: String!
@@ -83,6 +99,7 @@ export const mediafileSchema = gql`
   type Query {
     getMediafile(mediafileId: String): MediaFile
     GetPrimaryMediafileFromEntity(entityId: String!): Entity
+    FetchMediafilesOfEntity(entityIds: [String!]!): [MediaFileEntity]!
   }
 
   type Mutation {

@@ -15,6 +15,16 @@ export class MediafileAPI extends AuthRESTDataSource {
         return res;
     }
 
+    async getMediafiles(id: string): Promise<any> {
+        try {
+            return await this.get(
+                `${Collection.Entities}/${id}/mediafiles?non_public=1`
+            );
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async patchMetaDataMediaFile(
         mediafileId: String,
         mediaFileMetadata: Maybe<MediaFileMetadataInput>[]

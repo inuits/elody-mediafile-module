@@ -1,6 +1,6 @@
-import {Entitytyping, MediaFile, Resolvers} from "./generated-types/type-defs";
+import {Entitytyping, MediaFile, MediaFileEntity, Resolvers} from "./generated-types/type-defs";
 import { GraphQLError } from "graphql";
-import { ContextValue, type CollectionAPIEntity } from "base-graphql";
+import {ContextValue, type CollectionAPIEntity, getEntityId, resolveRelations} from "base-graphql";
 
 export const mediafileResolver: Resolvers<ContextValue> = {
   Query: {
@@ -8,6 +8,20 @@ export const mediafileResolver: Resolvers<ContextValue> = {
       return await dataSources.MediafileAPI.getMediaFile(
         mediafileId as string
       );
+    },
+    FetchMediafilesOfEntity: async (
+        _source,
+        { entityIds },
+        { dataSources }
+    ) => {
+      const mediafiles: MediaFileEntity[] = [];
+      for (const index in entityIds) {
+        const response = await dataSources.MediafileAPI.getMediafiles(
+            entityIds[index]
+        );
+        mediafiles.push(...response.results);
+      }
+      return mediafiles;
     },
     GetPrimaryMediafileFromEntity: async (_source, {entityId}, {dataSources}) => {
       const entity: CollectionAPIEntity = await dataSources.CollectionAPI.getEntity(entityId, Entitytyping.BaseEntity)  // Todo: Have a look if we can remove the type parameter from the getEntity function
@@ -105,6 +119,30 @@ export const mediafileResolver: Resolvers<ContextValue> = {
         result = false;
       }
       return result;
+    },
+  },
+  MediaFileEntity: {
+    id: async (parent: any) => {
+      return getEntityId(parent);
+    },
+    uuid: async (parent: any) => {
+      return getEntityId(parent);
+    },
+    type: async (parent: any) => 'MediaFile',
+    intialValues: async (parent: any, _args) => {
+      return parent;
+    },
+    allowedViewModes: async (parent: any, _args, { dataSources }) => {
+      return parent;
+    },
+    relationValues: async (parent: any, _args, { dataSources }) => {
+      return resolveRelations(parent);
+    },
+    entityView: async (parent: any, _args, { dataSources }) => {
+      return parent;
+    },
+    teaserMetadata: async (parent: any, _args, { dataSources }) => {
+      return parent;
     },
   },
 };
