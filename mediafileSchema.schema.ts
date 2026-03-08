@@ -79,6 +79,7 @@ export const mediafileSchema = gql`
       bulkOperationOptions: BulkOperationOptions
       previewComponent: PreviewComponent
       deleteQueryOptions: DeleteQueryOptions
+      mapElement: MapElement
   }
 
   type Media implements Entity {
@@ -94,6 +95,8 @@ export const mediafileSchema = gql`
     sortOptions: SortOptions
     bulkOperationOptions: BulkOperationOptions
     previewComponent: PreviewComponent
+    deleteQueryOptions: DeleteQueryOptions
+    mapElement: MapElement
   }
 
   type Query {
