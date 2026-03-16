@@ -2,6 +2,7 @@ import { gql } from "graphql-modules";
 export const mediafileSchema = gql`
   enum Entitytyping {
     mediafile
+    mediaFileEntity
   }
 
   enum Collection {
