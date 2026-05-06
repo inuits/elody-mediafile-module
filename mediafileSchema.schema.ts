@@ -106,6 +106,34 @@ export const mediafileSchema = gql`
     FetchMediafilesOfEntity(entityIds: [String!]!): [MediaFileEntity]!
   }
 
+  type ContextMenuDownloadZipOfRelatedMediafilesAction {
+    label(input: String): String!
+    icon(input: String): String!
+    endpointUrl(input: String): String!
+    endpointMethod(input: String): String!
+    filename(input: String): String
+    can(input: [String]): [String]
+  }
+
+  extend type ContextMenuActions {
+    doDownloadZipOfRelatedMediafilesAction: ContextMenuDownloadZipOfRelatedMediafilesAction
+  }
+
+  extend type Query {
+    DownloadItemsInZip(
+      entities: [String]!
+      mediafiles: [String]!
+      basicCsv: Boolean!
+      includeAssetCsv: Boolean!
+      downloadEntity: EntityInput!
+    ): Entity
+    GenerateOcrWithAsset(
+      assetId: String!
+      operation: [String!]!
+      language: String!
+    ): JSON
+  }
+
   type Mutation {
     patchMediaFileMetadata(
       MediafileId: String!
