@@ -25,6 +25,9 @@
   "peerDependencies": {
     "base-graphql": "*"
   },
+  "devDependencies": {
+    "base-graphql": "*"
+  },
   "publishConfig": {
     "main": "./dist/mediafileModule.js",
     "types": "./types/mediafileModule.d.ts",
