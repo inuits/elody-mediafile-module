@@ -1,6 +1,6 @@
 {
   "name": "mediafile-module",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "license": "MIT",
   "main": "./mediafileModule.ts",
   "scripts": {
@@ -15,13 +15,15 @@
     "@types/express-session": "^1.18.0",
     "@types/node": "^22.13.14",
     "@types/node-fetch": "^2.6.12",
-    "base-graphql": "*",
     "express": "^4.18.2",
     "graphql": "^16.9.0",
     "graphql-modules": "^2.1.0",
     "http-proxy-middleware": "^2.0.7",
     "node-fetch": "^2.7.0",
     "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "base-graphql": "*"
   },
   "publishConfig": {
     "main": "./dist/mediafileModule.js",
