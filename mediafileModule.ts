@@ -8,7 +8,13 @@ import { OcrService } from './sources/ocr';
 import { applyUploadEndpoint } from './endpoints/uploadEndpoint';
 import { applyDownloadZipEndpoint } from './endpoints/downloadZipEndpoint';
 import applyMediaFileEndpoint from './endpoints/mediafilesEndpoint';
-import type { ElodyModuleConfig } from 'base-graphql';
+import type { ElodyModuleConfig as BaseElodyModuleConfig } from 'base-graphql';
+import type { Express } from 'express';
+import type { Environment } from 'base-graphql';
+
+type ElodyModuleConfig = BaseElodyModuleConfig & {
+  endpoints?: ((app: Express, environment: Environment) => void)[];
+};
 
 declare module "base-graphql" {
   interface DataSources {

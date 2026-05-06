@@ -52,7 +52,7 @@ export const mediafileResolver: Resolvers<ContextValue> = {
           }
         );
         createdEntity = await dataSources.CollectionAPI.createEntity(
-          downloadEntity,
+          downloadEntity as any,
           (downloadEntity.metadata as Metadata[]) || [],
           downloadEntity.relations as []
         );
@@ -213,7 +213,7 @@ export const mediafileResolver: Resolvers<ContextValue> = {
   },
   ContextMenuActions: {
     doDownloadZipOfRelatedMediafilesAction: async (parent: unknown) => {
-      return parent;
+      return parent as any;
     },
   },
   ContextMenuDownloadZipOfRelatedMediafilesAction: {
