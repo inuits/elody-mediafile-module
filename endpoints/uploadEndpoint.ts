@@ -216,10 +216,11 @@ const __createMediafileForEntity = async (
     metadata: entityInput.metadata,
     relations: entityInput.relations,
   };
-  body.metadata!.push({
-    key: 'title',
-    value: `${request.query.filename}`,
-  });
+  if (!body.metadata?.some((m) => m.key === 'title'))
+    body.metadata!.push({
+      key: 'title',
+      value: `${request.query.filename}`,
+    });
 
   return await datasource.post(
     `${env?.api.collectionApiUrl}/entities/${request.query.entityId}/mediafiles`,
@@ -253,10 +254,11 @@ const __createStandaloneMediafile = async (
       env.customization?.uploadEntityTypeToCreate ||
       Entitytyping.BaseEntity,
   };
-  body.metadata!.push({
-    key: 'title',
-    value: request.query.filename as string,
-  });
+  if (!body.metadata?.title)
+    body.metadata!.push({
+      key: 'title',
+      value: request.query.filename as string,
+    });
 
   return await datasource.post(
     `${env.api.collectionApiUrl}/entities?create_mediafile=1&mediafile_filename=${request.query.filename}`,
