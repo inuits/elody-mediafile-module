@@ -216,11 +216,6 @@ const __createMediafileForEntity = async (
     metadata: entityInput.metadata,
     relations: entityInput.relations,
   };
-  if (!body.metadata?.some((m) => m.key === 'title'))
-    body.metadata!.push({
-      key: 'title',
-      value: `${request.query.filename}`,
-    });
 
   return await datasource.post(
     `${env?.api.collectionApiUrl}/entities/${request.query.entityId}/mediafiles`,
