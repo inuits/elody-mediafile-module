@@ -249,11 +249,6 @@ const __createStandaloneMediafile = async (
       env.customization?.uploadEntityTypeToCreate ||
       Entitytyping.BaseEntity,
   };
-  if (!body.metadata?.title)
-    body.metadata!.push({
-      key: 'title',
-      value: request.query.filename as string,
-    });
 
   return await datasource.post(
     `${env.api.collectionApiUrl}/entities?create_mediafile=1&mediafile_filename=${request.query.filename}`,
