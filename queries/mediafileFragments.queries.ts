@@ -12,11 +12,6 @@ fragment mediafileInEntity on MediaFileEntity {
             key: "original_file_location"
         source: root
     )
-        transcode_file_location: keyValue(
-            key: "transcode_file_location"
-        source: derivatives
-        technicalOrigin: "transcode"
-    )
         thumbnail: keyValue(key: "filename", source: root)
         mimetype: keyValue(key: "mimetype", source: root)
         height: keyValue(key: "img_height", source: root)
