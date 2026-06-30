@@ -8,7 +8,7 @@ A `graphql-modules` module that handles all mediafile concerns in the Elody plat
 |-------|-------------|
 | GraphQL schema | `MediaFile`, `MediaFileEntity`, `MediaFileInput`, `MediaFileMetadataInput`, queries & mutations (see below) |
 | GraphQL resolvers | Resolvers for all mediafile queries, mutations, and type fields |
-| DataSources | `MediafileAPI`, `MediafileTranscodeService`, `StorageAPI`, `OcrService` — injected into every resolver context |
+| DataSources | `CollectionAPI` (extended), `MediafileTranscodeService`, `StorageAPI`, `OcrService` — injected into every resolver context |
 | Express endpoints | `/api/upload/*`, `/api/download/zip/:id`, `/api/mediafile/*`, `/api/iiif/*` |
 
 ---
@@ -44,8 +44,8 @@ A `graphql-modules` module that handles all mediafile concerns in the Elody plat
 
 All sources extend `AuthRESTDataSource` from `base-graphql` and are available as `context.dataSources.*` in every resolver.
 
-### `MediafileAPI`
-Talks to **collection-api**.
+### `CollectionAPI` (from `base-graphql`)
+The shared collection-api data source. The mediafile module uses it for all mediafile-related collection-api calls — no separate `MediafileAPI` data source exists.
 
 | Method | REST call | Description |
 |--------|-----------|-------------|
@@ -134,7 +134,7 @@ const config = {
 };
 ```
 
-The module merges four data sources into the `DataSources` interface (via declaration merging in `mediafileModule.ts`), so they are fully typed in resolver contexts without any extra configuration.
+The module merges three additional data sources into the `DataSources` interface (via declaration merging in `mediafileModule.ts`). Mediafile-related collection-api calls go through the existing `CollectionAPI` from `base-graphql`.
 
 ---
 
