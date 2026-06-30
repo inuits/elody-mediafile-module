@@ -1,92 +1,145 @@
-# Inuits DAMS Mediafile Module
+# Mediafile Module
 
+A `graphql-modules` module that handles all mediafile concerns in the Elody platform. It provides GraphQL types/queries/resolvers, four REST data sources, and three Express proxy endpoints for upload, download, and IIIF access.
 
+## What's included
 
-## Getting started
+| Layer | What it adds |
+|-------|-------------|
+| GraphQL schema | `MediaFile`, `MediaFileEntity`, `MediaFileInput`, `MediaFileMetadataInput`, queries & mutations (see below) |
+| GraphQL resolvers | Resolvers for all mediafile queries, mutations, and type fields |
+| DataSources | `MediafileAPI`, `MediafileTranscodeService`, `StorageAPI`, `OcrService` — injected into every resolver context |
+| Express endpoints | `/api/upload/*`, `/api/download/zip/:id`, `/api/mediafile/*`, `/api/iiif/*` |
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+---
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Express endpoints
 
-## Add your files
+### Upload — `uploadEndpoint.ts`
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+| Method | Path | Proxies to | Purpose |
+|--------|------|-----------|---------|
+| `POST` | `/api/upload/batch` | `collection-api /batch` | Batch entity creation from CSV or Excel. Pass `?dry_run=1` to validate without creating. |
+| `POST` | `/api/upload/single` | `collection-api /entities` or `/entities/:id/mediafiles` | Upload a single file as a standalone entity or linked to an existing entity (pass `?hasRelation=true&entityId=<id>`). |
 
+### Download zip — `downloadZipEndpoint.ts`
+
+| Method | Path | Proxies to | Purpose |
+|--------|------|-----------|---------|
+| `GET` | `/api/download/zip/:id` | `transcode-service /transcode/zip` | Triggers a zip build for the given entity and streams the result back. |
+
+### Mediafile & IIIF — `mediafilesEndpoint.ts`
+
+| Method | Path | Proxies to | Purpose |
+|--------|------|-----------|---------|
+| `GET` | `/api/mediafile/*` | `storage-api` (transcode or original) | Resolves the signed download URL from collection-api and streams the file. Add `?original=true` for the original; `?originalFilename=<name>` to set the `Content-Disposition` filename. |
+| `GET` | `/api/iiif*.json` | IIIF service (manifest) | Proxies IIIF manifests and rewrites the `id` field in the JSON response to keep paths consistent. Also adds a `Link: rel="describedby"` header pointing to the collection-api entity. |
+| `GET` | `/api/iiif/*` | IIIF image service | Proxies IIIF image tiles/thumbnails. Falls back to a static token when `IIIF_ALLOW_STATIC_TOKEN_FALLBACK=true` and user-token refresh fails. |
+
+> **Internal URL resolution**: collection-api returns `*.localhost` download URLs (Traefik-facing). The endpoint rewrites these to internal service addresses so server-side fetches succeed inside Docker.
+
+---
+
+## DataSources
+
+All sources extend `AuthRESTDataSource` from `base-graphql` and are available as `context.dataSources.*` in every resolver.
+
+### `MediafileAPI`
+Talks to **collection-api**.
+
+| Method | REST call | Description |
+|--------|-----------|-------------|
+| `getMediaFile(id)` | `GET /mediafiles/{id}` | Fetch a single mediafile |
+| `getMediafiles(entityId)` | `GET /entities/{id}/mediafiles?non_public=1` | List all mediafiles for an entity |
+| `patchMetaDataMediaFile(id, metadata)` | `PATCH /mediafiles/{id}` | Update mediafile metadata |
+| `getAssetsRelationedWithMediafFile(id)` | `GET /mediafiles/{id}/assets` | Get assets related to a mediafile |
+| `linkMediafileToEntity(entityId, input)` | `POST /entities/{entityId}/mediafiles` | Attach a mediafile to an entity |
+
+### `MediafileTranscodeService`
+Extends `TranscodeService` from `base-graphql`.
+
+| Method | REST call | Description |
+|--------|-----------|-------------|
+| `generateTranscode(mediafiles, type, masterEntityId?)` | `POST /transcode/{type}` | Request a transcode job |
+
+### `StorageAPI`
+Extends `AuthRESTDataSource`. Provides a typed handle to the storage service; direct REST calls go through the proxy endpoints above.
+
+### `OcrService`
+Talks to the **OCR service**.
+
+| Method | REST call | Description |
+|--------|-----------|-------------|
+| `generateOcrWithAsset(assetId, operations, language)` | `POST /ocr?language={language}` | Trigger OCR on an asset |
+
+---
+
+## GraphQL API
+
+### Queries
+
+| Query | Description |
+|-------|-------------|
+| `getMediafile(id)` | Fetch a single `MediaFile` |
+| `FetchMediafilesOfEntity(id)` | List all mediafiles belonging to an entity |
+| `GetPrimaryMediafileFromEntity(id)` | Get the primary mediafile for an entity |
+| `DownloadItemsInZip` | Initiate a zip download for a set of items |
+| `GenerateOcrWithAsset` | Trigger OCR and return the result |
+
+### Mutations
+
+| Mutation | Description |
+|----------|-------------|
+| `patchMediaFileMetadata(id, input)` | Update metadata on a mediafile |
+| `getAssetsRelationedWithMediafFile(id)` | Retrieve assets linked to a mediafile |
+| `generateTranscode(input)` | Request a transcode job for one or more mediafiles |
+| `linkMediafileToEntity(entityId, input)` | Link a mediafile to an entity |
+
+### Types
+
+```graphql
+type MediaFile {
+  # ... all mediafile fields
+  isPublic: Boolean
+}
+
+type MediaFileEntity implements Entity {
+  id: String
+  uuid: String
+  type: String
+  intialValues: [MetaData]
+  allowedViewModes: [ViewMode]
+  relationValues: [Relation]
+  entityView: EntityView
+  teaserMetadata: [MetaData]
+}
+
+enum Entitytyping { mediafile, mediaFileEntity, ... }
+enum Collection { mediafiles, ... }
 ```
-cd existing_repo
-git remote add origin https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-mediafile-module.git
-git branch -M main
-git push -uf origin main
+
+---
+
+## Using the module
+
+Import `mediafileElodyConfig` and spread it into your `baseGraphql` setup:
+
+```ts
+import { mediafileElodyConfig } from 'mediafile-module';
+
+const config = {
+  modules: [...mediafileElodyConfig.modules],
+  dataSources: { ...mediafileElodyConfig.dataSources },
+  endpoints: [...(mediafileElodyConfig.endpoints ?? [])],
+};
 ```
 
-## Integrate with your tools
+The module merges four data sources into the `DataSources` interface (via declaration merging in `mediafileModule.ts`), so they are fully typed in resolver contexts without any extra configuration.
 
-- [ ] [Set up project integrations](https://gitlab.inuits.io/rnd/inuits/dams/inuits-dams-mediafile-module/-/settings/integrations)
+---
 
-## Collaborate with your team
+## Environment variables
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+| Variable | Effect |
+|----------|--------|
+| `IIIF_ALLOW_STATIC_TOKEN_FALLBACK` | Set to `true` to fall back to a static bearer token when user-token refresh fails on IIIF requests. |
