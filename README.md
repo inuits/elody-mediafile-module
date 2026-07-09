@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://elody.eu"><img src="https://elody.eu/images/logo.svg" alt="Elody" width="96" /></a>
+</p>
+
+<p align="center">Part of <a href="https://elody.eu">Elody</a> — the open semantic data platform.</p>
+
 # Mediafile Module
 
 A `graphql-modules` module that handles all mediafile concerns in the Elody platform. It provides GraphQL types/queries/resolvers, four REST data sources, and three Express proxy endpoints for upload, download, and IIIF access.
