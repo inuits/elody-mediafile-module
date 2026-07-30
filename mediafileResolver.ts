@@ -63,6 +63,8 @@ export const mediafileResolver: Resolvers<ContextValue> = {
           download_entity_title: createdEntity.metadata.filter(
             (metadata: Metadata) => metadata.key === 'title'
           )[0].value,
+          basic_csv: basicCsv,
+          include_asset_csv: includeAssetCsv
         });
       } catch (e) {
         throw new GraphQLError(
