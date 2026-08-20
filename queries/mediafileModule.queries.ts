@@ -82,7 +82,7 @@ export const mediafileModuleQueries = gql`
                             }
                             bulkOperationModal: {
                                 typeModal: DynamicForm
-                                formQuery: "GetImportMediafilesQuery"
+                                formQueries: ["GetImportMediafilesQuery"]
                                 askForCloseConfirmation: true
                                 neededPermission: canupdate
                             }
@@ -98,7 +98,7 @@ export const mediafileModuleQueries = gql`
                             }
                             bulkOperationModal: {
                                 typeModal: DynamicForm
-                                formQuery: "GetDownloadMediafilesForm"
+                                formQueries: ["GetDownloadMediafilesForm"]
                                 formRelationType: "hasMediafile"
                                 askForCloseConfirmation: true
                                 neededPermission: cancreate
