@@ -211,8 +211,13 @@ const __createMediafileForEntity = async (
     clientIp,
   });
 
+  // Without a filename the mediafile carries only metadata (e.g. a url), so there is no
+  // file to upload and no upload ticket to ask for. Never interpolate the missing param:
+  // that yields the string "undefined", which passes the backend's minLength check.
+  const filename = request.query.filename as string | undefined;
+
   const body = {
-    filename: `${request.query.filename}`,
+    ...(filename && { filename }),
     metadata: entityInput.metadata,
     relations: entityInput.relations,
   };
@@ -222,7 +227,7 @@ const __createMediafileForEntity = async (
     {
       body,
       headers: {
-        Accept: 'text/uri-list',
+        Accept: filename ? 'text/uri-list' : 'application/json',
         'Content-Type': 'application/json',
       },
     }
