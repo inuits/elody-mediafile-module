@@ -40,7 +40,7 @@ A `graphql-modules` module that handles all mediafile concerns in the Elody plat
 |--------|------|-----------|---------|
 | `GET` | `/api/mediafile/*` | `storage-api` (transcode or original) | Resolves the signed download URL from collection-api and streams the file. Add `?original=true` for the original; `?originalFilename=<name>` to set the `Content-Disposition` filename. |
 | `GET` | `/api/iiif*.json` | IIIF service (manifest) | Proxies IIIF manifests and rewrites the `id` field in the JSON response to keep paths consistent. Also adds a `Link: rel="describedby"` header pointing to the collection-api entity. |
-| `GET` | `/api/iiif/*` | IIIF image service | Proxies IIIF image tiles/thumbnails. Falls back to a static token when `IIIF_ALLOW_STATIC_TOKEN_FALLBACK=true` and user-token refresh fails. |
+| `GET` | `/api/iiif/*` | IIIF image service | Proxies IIIF image tiles/thumbnails. An incoming `Authorization` header is passed through as-is (for service-to-service callers like canopy-generator); otherwise the dashboard's session token is used. |
 
 > **Internal URL resolution**: collection-api returns `*.localhost` download URLs (Traefik-facing). The endpoint rewrites these to internal service addresses so server-side fetches succeed inside Docker.
 

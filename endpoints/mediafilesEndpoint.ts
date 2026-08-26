@@ -162,19 +162,15 @@ const applyMediaFileEndpoint = (app: Express, environment: Environment) => {
   app.use('/api/iiif/*', async (req, res) => {
     const target = `${environment.api.iiifUrl}${req.originalUrl.replace('/api', '')}`;
     try {
-      let response;
-      try {
-        response = await fetchWithTokenRefresh(target, { method: 'GET' }, req);
-      } catch (authErr) {
-        if (process.env.IIIF_ALLOW_STATIC_TOKEN_FALLBACK !== 'true') {
-          throw authErr;
-        }
-        const staticToken = environment.staticToken;
-        response = await fetch(target, {
-          method: 'GET',
-          headers: staticToken ? { Authorization: `Bearer ${staticToken}` } : {},
-        });
-      }
+      // If the caller already provided an Authorization header (e.g. a
+      // service-to-service client like canopy-generator using its own
+      // scoped JWT), pass it through as-is. Otherwise fall back to the
+      // dashboard's session-based token. This keeps the proxy generic —
+      // no tenant flags or referer heuristics.
+      const incomingAuth = req.headers.authorization as string | undefined;
+      const response = incomingAuth
+        ? await fetch(target, { method: 'GET', headers: { Authorization: incomingAuth } })
+        : await fetchWithTokenRefresh(target, { method: 'GET' }, req);
 
       if (!response.ok) {
         throw response;

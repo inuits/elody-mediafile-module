@@ -4,7 +4,8 @@
   "license": "MIT",
   "main": "./mediafileModule.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@graphql-codegen/add": "^4.0.1",
@@ -23,9 +24,6 @@
     "typescript": "^5.0.0"
   },
   "peerDependencies": {
-    "base-graphql": "*"
-  },
-  "devDependencies": {
     "base-graphql": "*"
   },
   "publishConfig": {
