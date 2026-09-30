@@ -83,6 +83,23 @@ export const mediafileSchema = gql`
       mapElement: MapElement
   }
 
+  type Download implements Entity {
+    id: String!
+    uuid: String!
+    type: String!
+    teaserMetadata: teaserMetadata
+    intialValues: IntialValues!
+    allowedViewModes: AllowedViewModes
+    relationValues: JSON
+    entityView: ColumnList!
+    advancedFilters: AdvancedFilters
+    sortOptions: SortOptions
+    bulkOperationOptions: BulkOperationOptions
+    previewComponent: PreviewComponent
+    deleteQueryOptions: DeleteQueryOptions
+    mapElement: MapElement
+  }
+
   type Media implements Entity {
     id: String!
     uuid: String!

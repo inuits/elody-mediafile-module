@@ -1,6 +1,6 @@
 import {Entity, EntityInput, Entitytyping, MediaFile, MediaFileEntity, Metadata, Resolvers} from "./generated-types/type-defs";
 import { GraphQLError } from "graphql";
-import {ContextValue, type CollectionAPIEntity, getEntityId, resolveRelations} from "base-graphql";
+import {ContextValue, type CollectionAPIEntity, getEntityId, resolveId, resolveRelations, simpleReturn} from "base-graphql";
 
 export const mediafileResolver: Resolvers<ContextValue> = {
   Query: {
@@ -212,6 +212,17 @@ export const mediafileResolver: Resolvers<ContextValue> = {
     teaserMetadata: async (parent: any, _args, { dataSources }) => {
       return parent;
     },
+  },
+  Download: {
+    id: resolveId,
+    uuid: resolveId,
+    intialValues: simpleReturn,
+    allowedViewModes: simpleReturn,
+    relationValues: resolveRelations,
+    entityView: simpleReturn,
+    teaserMetadata: simpleReturn,
+    deleteQueryOptions: simpleReturn,
+    mapElement: simpleReturn,
   },
   ContextMenuActions: {
     doDownloadZipOfRelatedMediafilesAction: async (parent: unknown) => {

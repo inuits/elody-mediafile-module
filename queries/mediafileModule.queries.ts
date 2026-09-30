@@ -252,4 +252,24 @@ export const mediafileModuleQueries = gql`
             }
         }
     }
+
+    query GetDownloadItemsInZip(
+        $entities: [String]!
+        $mediafiles: [String]!
+        $basicCsv: Boolean!
+        $includeAssetCsv: Boolean!
+        $downloadEntity: EntityInput!
+    ) {
+        DownloadItemsInZip(
+            entities: $entities
+            mediafiles: $mediafiles
+            basicCsv: $basicCsv
+            includeAssetCsv: $includeAssetCsv
+            downloadEntity: $downloadEntity
+        ) {
+            id
+            uuid
+            type
+        }
+    }
 `;
