@@ -28,41 +28,43 @@ fragment mediafileInEntity on MediaFileEntity {
             key(input: "original_filename")
             __typename
         }
-        contextMenuActions {
-            doLinkAction {
-                label(input: "contextMenu.contextMenuLinkAction.followLink")
-                icon(input: "AngleRight")
-                __typename
-            }
-            primaryMediafile: doGeneralAction {
-                label(
-                    input: "contextMenu.contextMenuGeneralAction.setPrimaryMediafile"
-            )
-                action(input: SetPrimaryMediafile)
-                icon(input: "Link")
-                __typename
-            }
-            primaryThumbnail: doGeneralAction {
-                label(
-                    input: "contextMenu.contextMenuGeneralAction.setPrimaryThumbnail"
-            )
-                action(input: SetPrimaryThumbnail)
-                icon(input: "ImageCheck")
-                __typename
-            }
-            deleteRelation: doElodyAction {
-                label(input: "contextMenu.contextMenuElodyAction.delete-relation")
-                action(input: DeleteRelation)
-                icon(input: "Trash")
-                __typename
-            }
-            deleteEntity: doElodyAction {
-                label(input: "contextMenu.contextMenuElodyAction.delete-entity")
-                action(input: DeleteEntity)
-                icon(input: "Trash")
-                __typename
-            }
-            __typename
+        buttons {
+          contextMenu {
+              doLinkAction {
+                  label(input: "contextMenu.contextMenuLinkAction.followLink")
+                  icon(input: "AngleRight")
+                  __typename
+              }
+              primaryMediafile: doGeneralAction {
+                  label(
+                      input: "contextMenu.contextMenuGeneralAction.setPrimaryMediafile"
+              )
+                  action(input: SetPrimaryMediafile)
+                  icon(input: "Link")
+                  __typename
+              }
+              primaryThumbnail: doGeneralAction {
+                  label(
+                      input: "contextMenu.contextMenuGeneralAction.setPrimaryThumbnail"
+              )
+                  action(input: SetPrimaryThumbnail)
+                  icon(input: "ImageCheck")
+                  __typename
+              }
+              deleteRelation: doElodyAction {
+                  label(input: "contextMenu.contextMenuElodyAction.delete-relation")
+                  action(input: DeleteRelation)
+                  icon(input: "Trash")
+                  __typename
+              }
+              deleteEntity: doElodyAction {
+                  label(input: "contextMenu.contextMenuElodyAction.delete-entity")
+                  action(input: DeleteEntity)
+                  icon(input: "Trash")
+                  __typename
+              }
+              __typename
+          }
         }
     }
     allowedViewModes {
