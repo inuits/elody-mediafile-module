@@ -64,23 +64,20 @@ const getDownloadUrlForMediafile = async (
   }
 };
 
-/**
- * The collection-api returns external (Traefik-facing) download URLs which use
- * *.localhost domains. These are unreachable from inside the container because
- * *.localhost always resolves to 127.0.0.1 (RFC 6761). This function maps known
- * external origins to their internal counterparts so the server-side fetch can
- * reach the actual service.
- */
-const resolveExternalDownloadUrlToInternalUrl = (
+export const resolveExternalDownloadUrlToInternalUrl = (
   downloadUrl: string,
   environment: Environment
 ): string => {
-  const parsed = new URL(downloadUrl);
-  if (!parsed.hostname.endsWith('.localhost')) return downloadUrl;
-  if (parsed.origin === new URL(environment.api.iiifUrlFrontend).origin) {
-    return new URL(environment.api.iiifUrl).origin + parsed.pathname + parsed.search;
+  const externalToInternal = [
+    [environment.api.storageApiUrlExt, environment.api.storageApiUrl],
+    [environment.api.iiifUrlFrontend, environment.api.iiifUrl],
+  ];
+  for (const [externalUrl, internalUrl] of externalToInternal) {
+    const externalPrefix = externalUrl.replace(/\/+$/, '');
+    if (downloadUrl.startsWith(`${externalPrefix}/`))
+      return internalUrl.replace(/\/+$/, '') + downloadUrl.slice(externalPrefix.length);
   }
-  return new URL(environment.api.storageApiUrl).origin + parsed.pathname + parsed.search;
+  return downloadUrl;
 };
 
 const applyMediaFileEndpoint = (app: Express, environment: Environment) => {
