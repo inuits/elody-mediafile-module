@@ -10,7 +10,6 @@
   "dependencies": {
     "@graphql-codegen/add": "^4.0.1",
     "@graphql-codegen/cli": "^4.0.1",
-    "@graphql-codegen/graphql-modules-preset": "^4.0.11",
     "@graphql-codegen/typescript-resolvers": "^2.7.13",
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.18.0",
