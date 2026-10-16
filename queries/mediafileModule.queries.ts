@@ -66,93 +66,6 @@ export const mediafileModuleQueries = gql`
         }
     }
 
-    query GetBulkOperationsForMediafiles {
-        CustomBulkOperations {
-            bulkOperationOptions {
-                options(
-                    input: [
-                        {
-                            icon: PlusCircle
-                            label: "bulk-operations.add-existing-relation"
-                            value: "addRelation"
-                            actionContext: {
-                                activeViewMode: readMode
-                                entitiesSelectionType: noneSelected
-                                labelForTooltip: "tooltip.bulkOperationsActionBar.readmode-noneselected"
-                            }
-                            bulkOperationModal: {
-                                typeModal: DynamicForm
-                                formQueries: ["GetImportMediafilesQuery"]
-                                askForCloseConfirmation: true
-                                neededPermission: canupdate
-                            }
-                        }
-                        {
-                            icon: DownloadAlt
-                            label: "bulk-operations.download-mediafiles"
-                            value: "downloadMediafiles"
-                            actionContext: {
-                                activeViewMode: readMode
-                                entitiesSelectionType: someSelected
-                                labelForTooltip: "tooltip.bulkOperationsActionBar.readmode-someselected"
-                            }
-                            bulkOperationModal: {
-                                typeModal: DynamicForm
-                                formQueries: ["GetDownloadMediafilesForm"]
-                                formRelationType: "hasMediafile"
-                                askForCloseConfirmation: true
-                                neededPermission: cancreate
-                            }
-                        }
-                    ]
-                ) {
-                    icon
-                    label
-                    value
-                    primary
-                    actionContext {
-                        ...actionContext
-                    }
-                    bulkOperationModal {
-                        ...bulkOperationModal
-                    }
-                }
-            }
-        }
-    }
-    
-    mutation GenerateTranscode(
-        $mediafileIds: [String!]!
-        $transcodeType: TranscodeType!
-        $masterEntityId: String
-    ) {
-        generateTranscode(
-            mediafileIds: $mediafileIds
-            transcodeType: $transcodeType
-            masterEntityId: $masterEntityId
-        )
-    }
-    
-    mutation linkMediafileToEntity(
-        $entityId: String!
-        $mediaFileInput: MediaFileInput!
-    ) {
-        linkMediafileToEntity(
-            entityId: $entityId
-            mediaFileInput: $mediaFileInput
-        ) {
-            _id
-            filename
-            original_file_location
-            thumbnail_file_location
-            mimetype
-            metadata {
-                key
-                value
-            }
-        }
-    }
-
     query GetPrimaryMediafileFromEntity($entityId: String!) {
         GetPrimaryMediafileFromEntity(entityId: $entityId) {
             ...mediafileInEntity
@@ -214,24 +127,6 @@ export const mediafileModuleQueries = gql`
                 __typename
             }
             __typename
-        }
-    }
-
-    query getPrimaryMediafileFilters($entityType: String!) {
-        EntityTypeFilters(type: $entityType) {
-            advancedFilters {
-                advancedFilter(type: type) {
-                    type
-                    defaultValue(value: "mediafile")
-                    hidden(value: true)
-                }
-                relation: advancedFilter(type: selection, key: ["dams:1|identifiers"]) {
-                    type
-                    key
-                    defaultValue(value: "$entity.intialValues.primary_mediafile_id")
-                    hidden(value: true)
-                }
-            }
         }
     }
 
