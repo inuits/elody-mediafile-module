@@ -8,13 +8,7 @@ import { OcrService } from './sources/ocr';
 import { applyUploadEndpoint } from './endpoints/uploadEndpoint';
 import { applyDownloadZipEndpoint } from './endpoints/downloadZipEndpoint';
 import applyMediaFileEndpoint from './endpoints/mediafilesEndpoint';
-import type { ElodyModuleConfig as BaseElodyModuleConfig } from 'base-graphql';
-import type { Express } from 'express';
-import type { Environment } from 'base-graphql';
-
-type ElodyModuleConfig = BaseElodyModuleConfig & {
-  endpoints?: ((app: Express, environment: Environment) => void)[];
-};
+import { defineElodyModule } from 'base-graphql';
 
 declare module "base-graphql" {
   interface DataSources {
@@ -25,26 +19,33 @@ declare module "base-graphql" {
   }
 }
 
-const mediafileModule = createModule({
-  id: 'mediafileModule',
-  dirname: __dirname,
-  typeDefs: [mediafileSchema],
-  resolvers: [mediafileResolver],
-});
-
-export const mediafileElodyConfig: ElodyModuleConfig = {
-  modules: [mediafileModule],
-  dataSources: {
-    MediafileAPI: MediafileAPI,
-    TranscodeService: MediafileTranscodeService,
-    StorageAPI: StorageAPI,
-    OcrService: OcrService,
-  },
+const mediafileModule = defineElodyModule({
+  name: 'mediafileModule',
+  graphqlModule: createModule({
+    id: 'mediafileModule',
+    dirname: __dirname,
+    typeDefs: [mediafileSchema],
+    resolvers: [mediafileResolver],
+  }),
+  dataSources: [
+    { name: 'MediafileAPI', source: MediafileAPI },
+    { name: 'TranscodeService', source: MediafileTranscodeService },
+    { name: 'StorageAPI', source: StorageAPI },
+    { name: 'OcrService', source: OcrService },
+  ],
   endpoints: [
     (app) => applyUploadEndpoint(app),
-    (app, env) => applyDownloadZipEndpoint(app),
-    (app, env) => applyMediaFileEndpoint(app, env),
+    (app) => applyDownloadZipEndpoint(app),
+    (app, environment) => applyMediaFileEndpoint(app, environment),
   ],
-};
+});
 
-export { mediafileModule, mediafileResolver, mediafileSchema, MediafileAPI, MediafileTranscodeService, StorageAPI, OcrService };
+export {
+  mediafileModule,
+  mediafileResolver,
+  mediafileSchema,
+  MediafileAPI,
+  MediafileTranscodeService,
+  StorageAPI,
+  OcrService,
+};
