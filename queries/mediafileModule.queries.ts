@@ -167,4 +167,13 @@ export const mediafileModuleQueries = gql`
             type
         }
     }
+
+    mutation LinkMediafileToEntity(
+        $entityId: String!
+        $mediaFileInput: MediaFileInput!
+    ) {
+        linkMediafileToEntity(entityId: $entityId, mediaFileInput: $mediaFileInput) {
+            _id
+        }
+    }
 `;
