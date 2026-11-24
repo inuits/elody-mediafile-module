@@ -103,6 +103,11 @@ const applyMediaFileEndpoint = (app: Express, environment: Environment) => {
         const contentType = fileResponse.headers.get('content-type') || '';
         res.setHeader('Content-Type', contentType);
 
+        for (const header of ['Content-Length']) {
+          const value = fileResponse.headers.get(header.toLowerCase());
+          if (value) res.setHeader(header, value);
+        }
+
         const extension = contentType.split('/')[1] || '';
         if (originalFilename && extension) {
           res.setHeader('Content-Disposition', `attachment; filename="${originalFilename}.${extension}"`);
