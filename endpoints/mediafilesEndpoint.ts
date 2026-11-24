@@ -97,13 +97,18 @@ const applyMediaFileEndpoint = (app: Express, environment: Environment) => {
         if (!downloadUrl) throw new Error('Invalid URL returned from helper');
 
         const internalUrl = resolveExternalDownloadUrlToInternalUrl(downloadUrl, environment);
-        const fileResponse = await nodeFetch(internalUrl);
+        const range = req.headers.range;
+        const fileResponse = await nodeFetch(internalUrl, {
+          headers: range ? { Range: range } : {},
+        });
         if (!fileResponse.ok) throw new Error(`Upstream error: ${fileResponse.status}`);
+
+        res.status(fileResponse.status);
 
         const contentType = fileResponse.headers.get('content-type') || '';
         res.setHeader('Content-Type', contentType);
 
-        for (const header of ['Content-Length']) {
+        for (const header of ['Content-Length', 'Content-Range', 'Accept-Ranges']) {
           const value = fileResponse.headers.get(header.toLowerCase());
           if (value) res.setHeader(header, value);
         }
